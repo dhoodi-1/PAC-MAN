@@ -73,8 +73,6 @@ class AddPanel extends JPanel{
       add(addButton);
       add(rightField);
    }
-   public AddPanel(HomeScreen.ATNPanel atnPanel) {
-   }
    private class AddListener implements ActionListener{
       public void actionPerformed(ActionEvent e){
          total = Integer.parseInt(leftField.getText()) + Integer.parseInt(rightField.getText());
@@ -111,10 +109,7 @@ class ResultsPanel extends JPanel{
       add(NNButton);
    }
    
-   public ResultsPanel(AddPanel home, HomeScreen.ATNPanel atnPanel) {
-}
-
-public void updateNumber(){
+   public void updateNumber(){
       sumLabel.setText(""+a.getTotal());
    }
    
