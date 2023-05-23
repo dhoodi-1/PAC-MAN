@@ -4,7 +4,7 @@ import java.awt.image.*;
 
 public class Pacman implements Animatable
 {
-    private int dX;
+        private int dX;
         private int dY;
         private int x;
         private int y;
@@ -28,6 +28,7 @@ public class Pacman implements Animatable
 
             img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
             bufG = img.getGraphics();
+
 
         }
 
