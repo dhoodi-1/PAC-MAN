@@ -1,12 +1,8 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import javax.swing.Timer;
 
     public class HomeScreen extends JPanel
     {
@@ -135,25 +131,78 @@ import javax.swing.Timer;
         private HomePanel a;
         private HomeScreen owner;
 
+        public static final int FRAME = 500;
+        private BufferedImage myImage;  
+        private Graphics myBuffer;
+
+        private ArrayList<Walls> walls = new ArrayList<Walls>();
+
+        private Timer t;
+        private ArrayList<Pellet> p = new ArrayList<Pellet>();
+        private ArrayList<Pacman> pac = new ArrayList<Pacman>();
+        private ArrayList<Animatable> animationObjects;
+        private int frame=0;
+
         public GamePanel(HomePanel a, HomeScreen HomeScreen){
            this.a=a;
            owner=HomeScreen;
            setPreferredSize(new Dimension(800, 400));
            setLayout(new BorderLayout());
+
+            // myImage =  new BufferedImage(FRAME, FRAME, BufferedImage.TYPE_INT_RGB); //Make the image that will store each frame
+            // myBuffer = myImage.getGraphics(); //Get the Graphics object we can use to manipulate the image
+            //myBuffer.fillRect(0,0,FRAME,FRAME);
+
+            animationObjects = new ArrayList<Animatable>();
+            myImage =  new BufferedImage(FRAME, FRAME, BufferedImage.TYPE_INT_RGB); 
+            myBuffer = myImage.getGraphics(); 
+            myBuffer.fillRect(0,0,FRAME,FRAME);
+
+            
+
+            //animationObjects.add(pacman);
+            
+
+            // this makes the walls
+            // middle 2 blocks
+            walls.add(new Walls(325, 50, 150, 50));
+            walls.add(new Walls(325, 300, 150, 50));
+            // bottom right blocks
+            walls.add(new Walls(525, 250, 50, 100));
+            walls.add(new Walls(525, 325, 100, 25));
+            walls.add(new Walls(675, 250, 50, 100));
+            walls.add(new Walls(525, 0, 25, 100));
+            // top right middle blocks
+            walls.add(new Walls(525, 150, 200, 50));
+            walls.add(new Walls(600, 50, 50, 100));
+            walls.add(new Walls(625, 50, 100, 50));
+            walls.add(new Walls(525, 0, 25, 100));
+            // far right wall
+            walls.add(new Walls(775, 0, 25, 400));
+            // left side
+            walls.add(new Walls(75, 250, 50, 100));
+            walls.add(new Walls(75, 325, 100, 25));
+            walls.add(new Walls(225, 250, 50, 100));
+            walls.add(new Walls(175, 250, 100, 25));
+            // top left blocks
+            walls.add(new Walls(75, 150, 200, 50));
+            walls.add(new Walls(75, 50, 50, 100));
+            walls.add(new Walls(250, 50, 100, 50));
+            walls.add(new Walls(175, 0, 25, 100));
+            walls.add(new Walls(0, 0, 25, 400));
+            walls.add(new Walls(625, 250, 50, 25));
         }
+    
         // This draws the map and GamePanel calls this
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            drawMap(g);
-        
-            Toolkit t=Toolkit.getDefaultToolkit();  
-            Image i=t.getImage("New Piskel-1.png.png");  
-            g.drawImage(i, 30,360,this);  
+            drawMap(g); 
+            
         }
         public void drawMap(Graphics g){
             g.setColor(Color.BLACK);
-            g.fillRect(0, 0, 800, 400);           
+            g.fillRect(0, 0, 800, 400); 
 
             // Personal lines to help with drawing map // To be deleted later // start
             g.setColor(Color.GREEN);
@@ -208,108 +257,121 @@ import javax.swing.Timer;
             g.drawLine(800, 0, 800, 400);
             // end
 
-            g.setColor(Color.RED);
-            // middle box
-            g.drawLine(325, 150, 475, 150);
-            g.drawLine(325, 250, 475, 250);
-            g.drawLine(325, 150, 325, 250);
-            g.drawLine(475, 150, 475, 250);
-            // middle 2 blocks
-            g.fillRect(325, 50, 150, 50);
-            g.fillRect(325, 300, 150, 50);
-            // bottom right blocks 
-            g.fillRect(525, 250, 50, 100);
-            g.fillRect(525, 325, 100, 25);
-            g.fillRect(675, 250, 50, 100);
-            g.fillRect(625, 250, 100, 25);
-            // top right middle blocks
-            g.fillRect(525, 150, 200, 50);
-            g.fillRect(600, 50, 50, 100);
-            g.fillRect(625, 50, 100, 50);
-            g.fillRect(525, 0, 25, 100);
-            // far right wall
-            g.fillRect(775, 0, 25, 400);
-            // left side
-            g.fillRect(75, 250, 50, 100);
-            g.fillRect(75, 325, 100, 25);
-            g.fillRect(225, 250, 50, 100);
-            g.fillRect(175, 250, 100, 25);
-            // top left blocks
-            g.fillRect(75, 150, 200, 50);
-            g.fillRect(75, 50, 50, 100);
-            g.fillRect(250, 50, 100, 50);
-            g.fillRect(175, 0, 25, 100);
-            // far left wall
-            g.fillRect(0, 0, 25, 400);
+            // g.setColor(Color.RED);
+            // // middle box
+            // g.drawLine(325, 150, 475, 150);
+            // g.drawLine(325, 250, 475, 250);
+            // g.drawLine(325, 150, 325, 250);
+            // g.drawLine(475, 150, 475, 250);
+            
             // food/points
             g.setColor(Color.YELLOW);
-            for (int x = 45; x < 750; x += 25){
-                g.fillOval(x, 370, 10, 10);
+            for (int x = 50; x < 755; x += 25){
+                Pellet pp = new Pellet(x, 375);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int y = 20; y < 350; y += 25){
-                g.fillOval(45, y, 10, 10);
+            for (int y = 50; y < 370; y += 25){
+                Pellet pp = new Pellet(50, y);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int y = 20; y < 350; y += 25){
-                g.fillOval(745, y, 10, 10);
+            for (int y = 25; y < 375; y += 25){
+                Pellet pp = new Pellet(750, y);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int x = 70; x < 165; x += 25){
-                g.fillOval(x, 20, 10, 10);
+            for (int x = 50; x < 165; x += 25){
+                Pellet pp = new Pellet(x, 25);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int x = 220; x < 500; x += 25){
-                g.fillOval(x, 20, 10, 10);
+            for (int x = 225; x < 500; x += 25){
+                Pellet pp = new Pellet(x, 25);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int x = 570; x < 750; x += 25){
-                g.fillOval(x, 20, 10, 10);
+            for (int x = 575; x < 750; x += 25){
+                Pellet pp = new Pellet(x, 25);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int x = 70; x < 280; x += 25){
-                g.fillOval(x, 220, 10, 10);
+            for (int x = 75; x < 280; x += 25){
+                Pellet pp = new Pellet(x, 225);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int x = 520; x < 750; x += 25){
-                g.fillOval(x, 220, 10, 10);
+            for (int x = 525; x < 750; x += 25){
+                Pellet pp = new Pellet(x, 225);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int y = 45; y < 125; y += 25){
-                g.fillOval(145, y, 10, 10);
+            for (int y = 50; y < 125; y += 25){
+                Pellet pp = new Pellet(150, y);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int x = 170; x < 575; x += 25){
-                g.fillOval(x, 120, 10, 10);
+            for (int x = 150; x < 600; x += 25){
+                Pellet pp = new Pellet(x, 125);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int y = 45; y < 100; y += 25){
-                g.fillOval(220, y, 10, 10);
+            for (int y = 50; y < 100; y += 25){
+                Pellet pp = new Pellet(225, y);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int y = 45; y < 100; y += 25){
-                g.fillOval(495, y, 10, 10);
+            for (int y = 50; y < 100; y += 25){
+                Pellet pp = new Pellet(500, y);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int y = 45; y < 100; y += 25){
-                g.fillOval(570, y, 10, 10);
+            for (int y = 50; y < 100; y += 25){
+                Pellet pp = new Pellet(575, y);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int y = 145; y < 350; y += 25){
-                g.fillOval(295, y, 10, 10);
+            for (int y = 150; y < 350; y += 25){
+                Pellet pp = new Pellet(300, y);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int y = 145; y < 350; y += 25){
-                g.fillOval(495, y, 10, 10);
+            for (int y = 150; y < 350; y += 25){
+                Pellet pp = new Pellet(500, y);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int x = 320; x < 500; x += 25){
-                g.fillOval(x, 270, 10, 10);
+            for (int x = 325; x < 500; x += 25){
+                Pellet pp = new Pellet(x, 275);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int y = 245; y < 300; y += 25){
-                g.fillOval(145, y, 10, 10);
+            for (int y = 250; y < 300; y += 25){
+                Pellet pp = new Pellet(150, y);
+                pp.drawMe(g);
+                p.add(pp);
             }
             for (int y = 295; y < 350; y += 25){
-                g.fillOval(195, y, 10, 10);
+                Pellet pp = new Pellet(200, y);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int y = 295; y < 350; y += 25){
-                g.fillOval(645, y, 10, 10);
+            for (int y = 300; y < 350; y += 25){
+                Pellet pp = new Pellet(650, y);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            for (int y = 245; y < 300; y += 25){
-                g.fillOval(595, y, 10, 10);
+            for (int y = 250; y < 300; y += 25){
+                Pellet pp = new Pellet(600, y);
+                pp.drawMe(g);
+                p.add(pp);
             }
-            g.fillOval(170, 295, 10, 10);
-            g.fillOval(620, 295, 10, 10);
-            for (int x = 670; x < 745; x += 25){
-                g.fillOval(x, 120, 10, 10);
-            }
+            for(Walls wall : walls){
+                wall.drawMe(g);
+              }
         }
     }
+
         // Settings Panel
         class SettingsPanel extends JPanel{
             private HomePanel a;
@@ -338,7 +400,7 @@ import javax.swing.Timer;
             s.setFont(new Font("Serif", Font.BOLD, 20));
             s.setColor(Color.BLACK);
             s.drawString("Controls -", 15, 100);
-            s.drawString(" Use WASD to control Pac-Man", 100, 100);
+            s.drawString(" Use WASD or arrow keys to control Pac-Man", 100, 100);
 
         }
     }
