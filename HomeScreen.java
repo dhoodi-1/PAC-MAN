@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.util.ArrayList;
+import java.awt.Dimension;
+import javax.swing.JButton;
 
     public class HomeScreen extends JPanel
     {
@@ -10,7 +12,7 @@ import java.util.ArrayList;
         private HomePanel home;
         private GamePanel game;
         private SettingsPanel settings;
-        
+        private ScorePanel score;
         
         public HomeScreen(JFrame f)
         {   
@@ -21,11 +23,14 @@ import java.util.ArrayList;
             add(home);
             game = new GamePanel(home,this);
             settings = new SettingsPanel(home, this);
+            score = new ScorePanel(home, this);
+
         }
         // Used to tell the actionListener to switch panels
         public void showGame(){
             remove(home);
             add(game);
+            game.requestFocusInWindow();
             repaint();
             revalidate();
             owner.pack();
@@ -39,6 +44,21 @@ import java.util.ArrayList;
             revalidate();
             owner.pack();
          }
+         // settings to home
+        public void showHome(){
+            remove(settings);
+            remove(score);
+            add(home);
+            repaint();
+            owner.pack();
+        }
+        // home to score
+        public void showScore(){
+            remove(home);
+            add(score);
+            repaint();
+            owner.pack();
+        }
     }
     // Home screen
     class HomePanel extends JPanel{
@@ -85,7 +105,7 @@ import java.util.ArrayList;
            score.setBackground(Color.BLUE);
            score.setOpaque(true);
            score.setBorderPainted(false);
-           //play.addActionListener(new playListener);
+           score.addActionListener(new scoreListener());
            buttons.add(score);
 
 
@@ -125,6 +145,11 @@ import java.util.ArrayList;
                 owner.showSettings();
             }
         }
+        private class scoreListener implements ActionListener{
+            public void actionPerformed(ActionEvent e){
+                owner.showScore();
+            }
+        }
 }
     // Game #to be updated
     class GamePanel extends JPanel{
@@ -139,9 +164,13 @@ import java.util.ArrayList;
 
         private Timer t;
         private ArrayList<Pellet> p = new ArrayList<Pellet>();
-        private ArrayList<Pacman> pac = new ArrayList<Pacman>();
         private ArrayList<Animatable> animationObjects;
         private int frame=0;
+        private boolean left;
+        private boolean right;
+        private boolean up;
+        private boolean down;
+        private Pacman pac;
 
         public GamePanel(HomePanel a, HomeScreen HomeScreen){
            this.a=a;
@@ -149,19 +178,23 @@ import java.util.ArrayList;
            setPreferredSize(new Dimension(800, 400));
            setLayout(new BorderLayout());
 
-            // myImage =  new BufferedImage(FRAME, FRAME, BufferedImage.TYPE_INT_RGB); //Make the image that will store each frame
-            // myBuffer = myImage.getGraphics(); //Get the Graphics object we can use to manipulate the image
-            //myBuffer.fillRect(0,0,FRAME,FRAME);
-
             animationObjects = new ArrayList<Animatable>();
             myImage =  new BufferedImage(FRAME, FRAME, BufferedImage.TYPE_INT_RGB); 
             myBuffer = myImage.getGraphics(); 
             myBuffer.fillRect(0,0,FRAME,FRAME);
 
-            
+            t = new Timer(100, new AnimationListener());
+            t.start();
 
-            //animationObjects.add(pacman);
-            
+            addKeyListener(new Key());
+            setFocusable(true);
+      
+            left = false;
+            right = false;
+            up = false;
+            down = false;
+
+            pac = new Pacman(50, 375);
 
             // this makes the walls
             // middle 2 blocks
@@ -196,6 +229,7 @@ import java.util.ArrayList;
         // This draws the map and GamePanel calls this
         @Override
         protected void paintComponent(Graphics g) {
+            g.drawImage(myImage, 0, 0, getWidth(), getHeight(), null);
             super.paintComponent(g);
             drawMap(g); 
             
@@ -369,7 +403,86 @@ import java.util.ArrayList;
             for(Walls wall : walls){
                 wall.drawMe(g);
               }
+
+              pac.drawMe(g);
+              animationObjects.add(pac);
         }
+        public void animate(){
+            //pac.drawMe(g);
+            myBuffer.fillRect(0,0,800,400);
+            for(Animatable animationObject : animationObjects)
+            {
+                animationObject.step();  //Every Animatable object knows how to do one animation step
+                animationObject.drawMe(myBuffer);  //Every Animatable object knows how to draw itself on a Graphics object
+            }
+            repaint();
+        }
+        private class AnimationListener implements ActionListener
+        {
+            public void actionPerformed(ActionEvent e)  //Gets called over and over by the Timer
+            {
+                animate();  //...hence animation!
+            }
+        }
+        private class Key extends KeyAdapter {
+            public void keyPressed(KeyEvent e) {
+               if(e.getKeyCode() == KeyEvent.VK_LEFT && !left) {
+                System.out.println("left");
+                  pac.setDX(pac.getDX() - 25);
+                  //pac.setDY(0);
+                  left = true;
+                //   right = false;
+                //   up = false;
+                //   down = false;
+               }
+               if(e.getKeyCode() == KeyEvent.VK_RIGHT && !right) {
+                System.out.println("right");
+                  pac.setDX(pac.getDX() + 25);
+                  //pac.setDY(0);
+                  right = true;
+                //   left = false;
+                //   up = false;
+                //   down = false;
+               }
+               if(e.getKeyCode() == KeyEvent.VK_UP && !up) {
+                System.out.println("up");
+                  pac.setDY(pac.getDY() - 25);
+                  //pac.setDX(0);
+                  up = true;
+                //   left = false;
+                //   right = false;
+                //   down = false;
+               }
+               if(e.getKeyCode() == KeyEvent.VK_DOWN && !down) {
+                System.out.println("down");
+                  pac.setDY(pac.getDY() + 25);
+                  //pac.setDX(0);
+                  down = true;
+                //   left = false;
+                //   right = false;
+                //   up = false;
+               }
+            }
+            public void keyReleased(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+                   pac.setDX(pac.getDX()+ 0);
+                   left = false;
+                }
+                if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                   pac.setDX(pac.getDX() - 0); 
+                   right = false;
+                }
+                if(e.getKeyCode() == KeyEvent.VK_UP) {
+                   pac.setDY(pac.getDY() + 0);
+                   up = false;
+                }
+                if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+                pac.setDY(pac.getDY() - 0);
+                   down = false;
+                }
+             }
+        } 
+
     }
 
         // Settings Panel
@@ -381,26 +494,166 @@ import java.util.ArrayList;
                 this.a = a;
                 owner=HomeScreen;
             setPreferredSize(new Dimension(400, 400));
-            setLayout(new BorderLayout());
+            setLayout(null); // Set null layout
+            
+            ImageIcon back = new ImageIcon("CSback2.png");
+            JButton backButton = new JButton(back);
+            backButton.setBounds(15, 10, 80, 70); // Set the button's position and size
+            backButton.addActionListener(new backListener());
+            add(backButton); // Add the button to the frame
+
+            setSize(400, 300); // Set the frame size
+            setVisible(true); 
             }
-        // calls the drawing
-        @Override
-        protected void paintComponent(Graphics s) {
-            super.paintComponent(s);
-            drawSettings(s);
-        }
-        // draws the settings menu
+            private class backListener implements ActionListener{
+                public void actionPerformed(ActionEvent e){
+                    owner.showHome();
+                }
+            }
+            @Override
+            protected void paintComponent(Graphics s) {
+                super.paintComponent(s);
+                drawSettings(s); 
+                
+            }
+        //draws the settings menu
         public void drawSettings(Graphics s){
             s.setColor(Color.YELLOW);
             s.fillRect(0, 0, 500, 500);  
-            JLabel title = new JLabel("Settings");
-            title.setFont(new Font("Serif", Font.BOLD, 50));
-            title.setHorizontalAlignment(SwingConstants.CENTER);
-            add(title, BorderLayout.NORTH);
-            s.setFont(new Font("Serif", Font.BOLD, 20));
+            s.setFont(new Font("Serif", Font.BOLD, 50));
             s.setColor(Color.BLACK);
-            s.drawString("Controls -", 15, 100);
-            s.drawString(" Use WASD or arrow keys to control Pac-Man", 100, 100);
+            s.drawString("Settings", 130, 60);
+            s.setFont(new Font("Serif", Font.BOLD, 20));
+            s.drawString("Controls -", 8, 100);
+            s.drawString(" Use Arrow keys to control Pac-Man", 88, 100);
+            
 
         }
     }
+
+    class ScorePanel extends JPanel{
+        private HomePanel a;
+        private HomeScreen owner; 
+        JTextField sFields = new JTextField("0", 10);
+        JTextField[] inputFields = new JTextField[3];
+
+        
+        public ScorePanel(HomePanel a, HomeScreen HomeScreen){
+            this.a = a;
+            owner=HomeScreen;
+            setPreferredSize(new Dimension(600, 550));
+            
+            ImageIcon back = new ImageIcon("CSback2.png");
+            JButton backButton = new JButton(back);
+            backButton.setBounds(15, 10, 100, 100); // Set the button's position and size
+            backButton.addActionListener(new backListener());
+            add(backButton); // Add the button to the frame
+
+            setSize(400, 300); // Set the frame size
+            setVisible(true); 
+            
+            
+            //Top
+        JPanel topSubPanel = new JPanel();
+        topSubPanel.setLayout(new GridLayout(1, 3));
+
+        JLabel omLabel = new JLabel("Scores");
+        omLabel.setFont(new Font("Arial", Font.BOLD, 15));
+        topSubPanel.add(omLabel);
+
+        JButton scvButton = new JButton("Show current values");
+        JButton mfasButton = new JButton("Modify fields as shown");
+        scvButton.addActionListener(new SCVListener());
+        mfasButton.addActionListener(new MFASListener());
+        topSubPanel.add(scvButton);
+        topSubPanel.add(mfasButton);
+      
+        add(topSubPanel, BorderLayout.NORTH);
+
+        //Bottom
+        JPanel bottomSubpanel = new JPanel();
+        bottomSubpanel.setLayout(new GridLayout(1,4));
+      
+        JLabel slLabel = new JLabel("Save/Load:");
+        slLabel.setFont(new Font("Arial", Font.BOLD, 15));
+        bottomSubpanel.add(slLabel);
+      
+        bottomSubpanel.add(sFields);
+      
+        JButton stfButton = new JButton("Save to file");
+        JButton lffButton = new JButton("Load from file");
+        stfButton.addActionListener(new STFListener());
+        lffButton.addActionListener(new LFFListener());
+        bottomSubpanel.add(stfButton);
+        bottomSubpanel.add(lffButton);
+        
+        add(bottomSubpanel, BorderLayout.SOUTH);
+
+        //Left
+        JPanel westSubpanel = new JPanel();
+        westSubpanel.setLayout(new GridLayout(3,1));
+        
+        JLabel[] wLabels = new JLabel[3];
+        wLabels[0] = new JLabel("Your Name:");
+        wLabels[1] = new JLabel("Score:");
+        wLabels[2] = new JLabel("Date(mm/dd/yyyy):");
+        
+        for(int i=0; i<3; i++){
+            wLabels[i].setFont(new Font("Arial", Font.BOLD, 15));
+            westSubpanel.add(wLabels[i]);
+        }
+        
+        add(westSubpanel, BorderLayout.WEST);
+        
+        //east
+        JPanel eastSubpanel = new JPanel();
+        eastSubpanel.setLayout(new GridLayout(3,1));
+        
+        for(int i=0; i<3; i++){
+            inputFields[i] = new JTextField("0", 20);
+            eastSubpanel.add(inputFields[i]);
+        }
+        
+        add(eastSubpanel, BorderLayout.EAST);
+    }
+    Scores player = new Scores();
+    private class SCVListener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+           inputFields[0].setText(""+player.getname());
+           inputFields[1].setText(""+player.getscore());
+           inputFields[2].setText(""+player.getdate());
+        }
+     }
+     private class MFASListener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+           player.setname(inputFields[0].getText());
+           player.setdate((inputFields[2].getText()));
+           player.setscore(Integer.parseInt(inputFields[1].getText()));
+        }
+     }
+     private class STFListener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+           try{
+              player.save(sFields.getText());
+           }catch(Exception ex){
+              System.out.println("error " + ex);
+           }
+        }
+     }
+     private class LFFListener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+           try{
+              player.load(sFields.getText());
+           }catch(Exception ex){
+              System.out.println("error " + ex);
+           }
+        }
+     }
+     private class backListener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+            owner.showHome();
+        }
+    }
+
+  }
+        
