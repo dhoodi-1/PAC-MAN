@@ -70,11 +70,11 @@ public class Square
    //other useful Java methods
    
    //(leave this commented out until the assignment tells you to use it)
-   
+   /*
    public String toString()
    {
       return "Square at " + x + ", " + y + " with side length " + side + " and color set to " + c;
    }
-   
+   */
    
 }

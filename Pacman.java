@@ -1,126 +1,50 @@
-import java.awt.*;
-import java.util.ArrayList;
+import java.awt.Color;
+//import java.awt.Graphics;
+
+public class Pacman extends Square implements Animatable {
+   // private int x;
+   // private int y; 
+   private int dX;
+   private int dY;
+   private int side;
+
+    public Pacman(int sideValue, int xValue, int yValue) {
+        super(sideValue, xValue-(sideValue/2), yValue-(sideValue/2), Color.WHITE );
+        dX = 0;
+        dY = 0;
+        side = 10;
+     }
+  
+    public Pacman(int xValue, int yValue) {
+        super(20, xValue-(10), yValue-(10), Color.WHITE);
+        dX = 0;
+        dY = 0;
+        side = 10;
+     }
+  
+    public void step(){
+        setX(getX() + dX);  
+        setY(getY() + dY);
+    }
+    public int getDX() {
+        return dX;
+     }
+     public int getDY() {
+        return dY;
+     }
+     public int getSide() {
+       return side;
+     }
+     
+     public void setDX(int dXValue) {
+        dX = dXValue;
+     }
+     public void setDY(int dYValue) {
+        dY = dYValue;
+     }
 
 
-public class Pacman {
-    private double x;
-    private double y;
-    private int width;
-    private int height;
-    private double speed;
-    
-    public Pacman(double x, double y, int width, int height, double speed) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-    this.speed = speed;
-    }
-    
-    public Pacman(int x, int y) {
-    this.x = x;
-    this.y = y;
-    }
-    
-    public void setX(int x) {
-    this.x = x;
-    }
-    
-    public void setY(int y) {
-    this.y = y;
-    }
-    
-    public double getX() {
-    return x;
-    }
-    
-    public double getY() {
-    return y;
-    }
-    
-    public int getWidth() {
-    return width;
-    }
-    
-    public int getHeight() {
-    return height;
-    }
-    
-    public void setWidth(int width) {
-    this.width = width;
-    }
-    
-    public void setHeight(int height) {
-    this.height = height;
-    }
-
-public void draw(Graphics g) {
-    g.setColor(Color.yellow);
-    g.fillOval((int)x, (int)y, width, height);
-    }
-    
-    public void moveUp(int WIDTH, int HEIGHT) {
-    if (y > 0) {
-    y -= speed;
-    }
-    }
-    
-    public void moveDown(int WIDTH, int HEIGHT) {
-    if (y < HEIGHT - height) {
-    y += speed;
-    }
-    }
-    
-    public void moveLeft(int WIDTH, int HEIGHT) {
-    if (x > 0) {
-    x -= speed;
-    }
-    }
-    
-    public void moveRight(int WIDTH, int HEIGHT) {
-    if (x < WIDTH - width) {
-    x += speed;
-    }
-    }
-    public boolean canMove(ArrayList<Walls> walls, int direction) {
-    double tempx = 0;
-    double tempy = 0;
-    if (direction == 1) {
-    tempx = x + speed;
-    tempy = y;
-    }
-    if (direction == 2) {
-    tempx = x;
-    tempy = y - speed;
-    }
-    if (direction == 3) {
-    tempx = x - speed;
-    tempy = y;
-    }
-    if (direction == 4) {
-    tempx = x;
-    tempy = y + speed;
-    }
-    for (int i = 0; i < walls.size(); i++) {
-        if (inWall(tempx, tempy, width, height, walls.get(i))) {
-        return false;
-        }
-        }
-        return true;
-        }
-        
-        private boolean inWall(double x, double y, int width, int height, Walls f) {
-        if (x < f.getX() + f.getW() && x + width > f.getX() && y < f.getY() + f.getH()
-        && y + height > f.getY()) {
-        return true;
-        }
-        return false;
-        }
-    }
-
-
-
-
+}
 
 // public class Pacman implements Animatable{
 //     private int dX;

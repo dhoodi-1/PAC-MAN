@@ -163,7 +163,7 @@ import javax.swing.JButton;
         private ArrayList<Walls> walls = new ArrayList<Walls>();
 
         private Timer t;
-        private ArrayList<Pellet> p = new ArrayList<Pellet>();
+        private static ArrayList<Pellet> p = new ArrayList<Pellet>();
         private ArrayList<Animatable> animationObjects;
         private int frame=0;
         private boolean left;
@@ -171,6 +171,29 @@ import javax.swing.JButton;
         private boolean up;
         private boolean down;
         private Pacman pac;
+        private boolean aa;
+        private boolean d;
+        private boolean w;
+        private boolean s;
+
+        //private Pacman pac;
+        private player1 play1;
+        private player2 play2;
+
+        public static ArrayList<Pellet> getPellets() {
+            return p;
+        }
+
+        public static void removePellet1(Pellet pp) {
+            p.remove(pp);
+        }
+
+        public static void removePellet2(int index) {
+            p.remove(index);
+            System.out.println("removed pellet");
+        }
+        private int counter1 = 5;
+        private int counter2 = 0;
 
         public GamePanel(HomePanel a, HomeScreen HomeScreen){
            this.a=a;
@@ -194,7 +217,8 @@ import javax.swing.JButton;
             up = false;
             down = false;
 
-            pac = new Pacman(50, 375);
+            play1 = new player1(); 
+            play2 = new player2();
 
             // this makes the walls
             // middle 2 blocks
@@ -403,9 +427,28 @@ import javax.swing.JButton;
             for(Walls wall : walls){
                 wall.drawMe(g);
               }
-
-              pac.drawMe(g);
-              animationObjects.add(pac);
+            //  if (counter1 + counter2 == 5){
+            //     if (counter1 > counter2){
+            //         g.setColor(Color.BLACK);
+            //         g.fillRect(0, 0, 800, 400);
+            //         g.setColor(Color.BLUE);
+            //         g.setFont(new Font("Serif", Font.BOLD, 50));
+            //         g.drawString("Player 1 is the Winner", 150, 200);
+            //     } else {
+            //         g.setColor(Color.BLACK);
+            //         g.fillRect(0, 0, 800, 400);
+            //         g.setColor(Color.BLUE);
+            //         g.setFont(new Font("Serif", Font.BOLD, 50));
+            //         g.drawString("Player 2 is the Winner", 150, 200);
+            //     }
+            //  }
+            
+              play1.drawMe(g);
+              play2.drawMe(g);
+              //animationObjects.add(pac);
+              animationObjects.add(play1);
+              animationObjects.add(play2);
+              
         }
         public void animate(){
             //pac.drawMe(g);
@@ -414,6 +457,8 @@ import javax.swing.JButton;
             {
                 animationObject.step();  //Every Animatable object knows how to do one animation step
                 animationObject.drawMe(myBuffer);  //Every Animatable object knows how to draw itself on a Graphics object
+                play1.eatPellet();
+                play2.eatPellet();
             }
             repaint();
         }
@@ -424,66 +469,134 @@ import javax.swing.JButton;
                 animate();  //...hence animation!
             }
         }
-        private class Key extends KeyAdapter {
-            public void keyPressed(KeyEvent e) {
-               if(e.getKeyCode() == KeyEvent.VK_LEFT && !left) {
-                System.out.println("left");
-                  pac.setDX(pac.getDX() - 25);
-                  //pac.setDY(0);
-                  left = true;
-                //   right = false;
-                //   up = false;
-                //   down = false;
-               }
-               if(e.getKeyCode() == KeyEvent.VK_RIGHT && !right) {
-                System.out.println("right");
-                  pac.setDX(pac.getDX() + 25);
-                  //pac.setDY(0);
-                  right = true;
-                //   left = false;
-                //   up = false;
-                //   down = false;
-               }
-               if(e.getKeyCode() == KeyEvent.VK_UP && !up) {
-                System.out.println("up");
-                  pac.setDY(pac.getDY() - 25);
-                  //pac.setDX(0);
-                  up = true;
-                //   left = false;
-                //   right = false;
-                //   down = false;
-               }
-               if(e.getKeyCode() == KeyEvent.VK_DOWN && !down) {
-                System.out.println("down");
-                  pac.setDY(pac.getDY() + 25);
-                  //pac.setDX(0);
-                  down = true;
-                //   left = false;
-                //   right = false;
-                //   up = false;
-               }
-            }
-            public void keyReleased(KeyEvent e) {
+        private class Key extends KeyAdapter 
+        {
+            public void keyPressed(KeyEvent e) 
+            {
+                if(e.getKeyCode() == KeyEvent.VK_LEFT && !left) {
+                 //System.out.println("left");
+                   //pac.setDX(-1);
+                   //pac.setDY(0);
+                   play1.setX(play1.getX() - 25);
+                   left = true;
+                   right = false;
+                   up = false;
+                   down = false;
+                   //System.out.println(getPellets());
+                 }
+                if(e.getKeyCode() == KeyEvent.VK_RIGHT && !right) {
+                 //System.out.println("right");
+                 //   pac.setDX(1);
+                   //pac.setDY(0);
+                   play1.setX(play1.getX() + 25);
+                   right = true;
+                   left = false;
+                   up = false;
+                   down = false;
+                }
+                if(e.getKeyCode() == KeyEvent.VK_UP && !up) {
+                 //System.out.println("up");
+                   //pac.setDY(-1);
+                   //pac.setDX(0);
+                   play1.setY(play1.getY() - 25);
+                   up = true;
+                   left = false;
+                   right = false;
+                   down = false;
+                }
+                if(e.getKeyCode() == KeyEvent.VK_DOWN && !down) {
+                    //System.out.println("down");
+                      //pac.setDY(1);
+                      //pac.setDX(0);
+                      play1.setY(play1.getY() + 25);
+                      down = true;
+                      left = false;
+                      right = false;
+                      up = false;
+                   }
+   
+                   if(e.getKeyCode() == KeyEvent.VK_A && !left) {
+                       //System.out.println("left");
+                         //pac.setDX(-1);
+                         //pac.setDY(0);
+                         play2.setX(play2.getX() - 25);
+                         aa = true;
+                         d = false;
+                         w = false;
+                         s = false;
+                         //System.out.println(getPellets());
+                   }
+                   if(e.getKeyCode() == KeyEvent.VK_D && !right) {
+                       //System.out.println("right");
+                       //   pac.setDX(1);
+                         //pac.setDY(0);
+                         play2.setX(play2.getX() + 25);
+                         aa = false;
+                         d = true;
+                         w = false;
+                         s = false;
+                      }
+                      if(e.getKeyCode() == KeyEvent.VK_W && !up) {
+                        //System.out.println("up");
+                          //pac.setDY(-1);
+                          //pac.setDX(0);
+                          play2.setY(play2.getY() - 25);
+                          w = true;
+                          aa = false;
+                          d = false;
+                          s = false;
+                       }
+                       if(e.getKeyCode() == KeyEvent.VK_S && !down) {
+                        //System.out.println("down");
+                          //pac.setDY(1);
+                          //pac.setDX(0);
+                          play2.setY(play2.getY() + 25);
+                          s = true;
+                          aa = false;
+                          d = false;
+                          w = false;
+                       }
+      }
+      
+      public void keyReleased(KeyEvent e) 
+             {
                 if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-                   pac.setDX(pac.getDX()+ 0);
+                   //play1.setDX(play1.getDX()+ 1);
                    left = false;
                 }
                 if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                   pac.setDX(pac.getDX() - 0); 
+                    //play1.setDX(play1.getDX() - 1); 
                    right = false;
                 }
                 if(e.getKeyCode() == KeyEvent.VK_UP) {
-                   pac.setDY(pac.getDY() + 0);
+                    //play1.setDY(play1.getDY() + 1);
                    up = false;
                 }
                 if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-                pac.setDY(pac.getDY() - 0);
+                    //play1.setDY(play1.getDY() - 1);
                    down = false;
-                }
-             }
-        } 
+                }    
 
-    }
+                if(e.getKeyCode() == KeyEvent.VK_A) {
+                    //play1.setDX(play1.getDX()+ 1);
+                    aa = false;
+                 }
+                 if(e.getKeyCode() == KeyEvent.VK_D) {
+                    //play1.setDX(play1.getDX() - 1); 
+                    d = false;
+                 }
+                 if(e.getKeyCode() == KeyEvent.VK_W) {
+                    //play1.setDY(play1.getDY() + 1);
+                    w = false;
+                 }
+                 if(e.getKeyCode() == KeyEvent.VK_S) {
+                    //play1.setDY(play1.getDY() - 1);
+                    s = false;
+                 }
+                }
+            }
+        }
+
 
         // Settings Panel
         class SettingsPanel extends JPanel{
@@ -524,8 +637,17 @@ import javax.swing.JButton;
             s.setColor(Color.BLACK);
             s.drawString("Settings", 130, 60);
             s.setFont(new Font("Serif", Font.BOLD, 20));
-            s.drawString("Controls -", 8, 100);
-            s.drawString(" Use Arrow keys to control Pac-Man", 88, 100);
+            s.drawString("Movement:", 8, 100);
+            s.drawString("Player 1:", 8, 120);
+            s.drawString(" Use Arrow keys to control Pac-Man", 3, 140);
+            s.drawString("Player 2:", 8, 165);
+            s.drawString("Use WASD to control Pac-Man", 8, 185);
+            s.drawString("Gameplay:", 8, 220);
+            s.drawString("Both players should avoid hitting walls", 8, 240);
+            s.drawString("How to Win:", 8, 280);
+            s.drawString("Players compete to see which player can", 8, 300);
+            s.drawString("collect the most pellets", 8, 320);
+
             
 
         }
