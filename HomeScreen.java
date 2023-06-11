@@ -376,21 +376,7 @@ pp28 = new Pellet(750, 375);
             g.setColor(Color.YELLOW);
 
 
-             if (play1.getCount() + play2.getCount() == 5){
-                if (counter1 > counter2){
-                    g.setColor(Color.BLACK);
-                    g.fillRect(0, 0, 800, 400);
-                    g.setColor(Color.BLUE);
-                    g.setFont(new Font("Serif", Font.BOLD, 50));
-                    g.drawString("Player 1 is the Winner", 150, 200);
-                } else {
-                    g.setColor(Color.BLACK);
-                    g.fillRect(0, 0, 800, 400);
-                    g.setColor(Color.BLUE);
-                    g.setFont(new Font("Serif", Font.BOLD, 50));
-                    g.drawString("Player 2 is the Winner", 150, 200);
-                }
-             }
+             
 
             
             for(Walls wall : walls){
@@ -431,6 +417,23 @@ pp28.drawMe(g);
               //animationObjects.add(pac);
               animationObjects.add(play1);
               animationObjects.add(play2);
+              if (play1.getCount() + play2.getCount() == 10){
+                if (play1.getCount() > play2.getCount()){
+                    g.setColor(Color.BLACK);
+                    g.fillRect(0, 0, 800, 400);
+                    g.setColor(Color.BLUE);
+                    g.setFont(new Font("Serif", Font.BOLD, 50));
+                    g.drawString("Player 1 is the Winner", 150, 200);
+                    t.stop();
+                } else {
+                    g.setColor(Color.BLACK);
+                    g.fillRect(0, 0, 800, 400);
+                    g.setColor(Color.BLUE);
+                    g.setFont(new Font("Serif", Font.BOLD, 50));
+                    g.drawString("Player 2 is the Winner", 150, 200);
+                    t.stop();
+                }
+             }
         }
         public void animate(){
             //pac.drawMe(g);
