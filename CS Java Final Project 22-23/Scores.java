@@ -68,4 +68,3 @@ public class Scores {
         date = input;
     }
 }
-

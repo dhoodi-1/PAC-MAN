@@ -170,9 +170,53 @@ import javax.swing.JButton;
         private boolean right;
         private boolean up;
         private boolean down;
-        private Pacman pac;
+
+        private boolean aa;
+        private boolean d;
+        private boolean w;
+        private boolean s;
+
+        //private Pacman pac;
+        private player1 play1;
+        private player2 play2;
+private Pellet pp1;
+private Pellet pp2;
+private Pellet pp3;
+private Pellet pp4;
+private Pellet pp5;
+private Pellet pp6;
+private Pellet pp7;
+private Pellet pp8;
+private Pellet pp9;
+private Pellet pp10;
+private Pellet pp11;
+private Pellet pp12;
+private Pellet pp13;
+private Pellet pp14;
+private Pellet pp15;
+private Pellet pp16;
+private Pellet pp17;
+private Pellet pp18;
+private Pellet pp19;
+private Pellet pp20;
+private Pellet pp21;
+private Pellet pp22;
+private Pellet pp23;
+private Pellet pp24;
+private Pellet pp25;
+private Pellet pp26;
+private Pellet pp27;
+private Pellet pp28;
+
+        //private Pellet pp;
+
+        public ArrayList<Pellet> getPellets() {
+            return p;
+        }
 
         public GamePanel(HomePanel a, HomeScreen HomeScreen){
+
+            
            this.a=a;
            owner=HomeScreen;
            setPreferredSize(new Dimension(800, 400));
@@ -183,7 +227,7 @@ import javax.swing.JButton;
             myBuffer = myImage.getGraphics(); 
             myBuffer.fillRect(0,0,FRAME,FRAME);
 
-            t = new Timer(100, new AnimationListener());
+            t = new Timer(5, new AnimationListener());
             t.start();
 
             addKeyListener(new Key());
@@ -194,8 +238,38 @@ import javax.swing.JButton;
             up = false;
             down = false;
 
-            pac = new Pacman(50, 375);
-
+            //pac = new Pacman(50, 375);
+            play1 = new player1();
+            play2 = new player2(); 
+pp1 = new Pellet(75, 375);
+pp2 = new Pellet(100, 375);
+pp3 = new Pellet(125, 375);
+pp4 = new Pellet(150, 375);
+pp5 = new Pellet(175, 375);
+pp6 = new Pellet(200, 375);
+pp7 = new Pellet(225, 375);
+pp8 = new Pellet(250, 375);
+pp9 = new Pellet(275, 375);
+pp10 = new Pellet(300, 375);
+pp11 = new Pellet(325, 375);
+pp12 = new Pellet(350, 375);
+pp13 = new Pellet(375, 375);
+pp14 = new Pellet(400, 375);
+pp15 = new Pellet(425, 375);
+pp16 = new Pellet(450, 375);
+pp17 = new Pellet(475, 375);
+pp18 = new Pellet(500, 375);
+pp19 = new Pellet(525, 375);
+pp20 = new Pellet(550, 375);
+pp21 = new Pellet(575, 375);
+pp22 = new Pellet(600, 375);
+pp23 = new Pellet(625, 375);
+pp24 = new Pellet(650, 375);
+pp25 = new Pellet(675, 375);
+pp26 = new Pellet(700, 375);
+pp27 = new Pellet(725, 375);
+pp28 = new Pellet(750, 375);
+            
             // this makes the walls
             // middle 2 blocks
             walls.add(new Walls(325, 50, 150, 50));
@@ -300,121 +374,139 @@ import javax.swing.JButton;
             
             // food/points
             g.setColor(Color.YELLOW);
-            for (int x = 50; x < 755; x += 25){
-                Pellet pp = new Pellet(x, 375);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int y = 50; y < 370; y += 25){
-                Pellet pp = new Pellet(50, y);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int y = 25; y < 375; y += 25){
-                Pellet pp = new Pellet(750, y);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int x = 50; x < 165; x += 25){
-                Pellet pp = new Pellet(x, 25);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int x = 225; x < 500; x += 25){
-                Pellet pp = new Pellet(x, 25);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int x = 575; x < 750; x += 25){
-                Pellet pp = new Pellet(x, 25);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int x = 75; x < 280; x += 25){
-                Pellet pp = new Pellet(x, 225);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int x = 525; x < 750; x += 25){
-                Pellet pp = new Pellet(x, 225);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int y = 50; y < 125; y += 25){
-                Pellet pp = new Pellet(150, y);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int x = 150; x < 600; x += 25){
-                Pellet pp = new Pellet(x, 125);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int y = 50; y < 100; y += 25){
-                Pellet pp = new Pellet(225, y);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int y = 50; y < 100; y += 25){
-                Pellet pp = new Pellet(500, y);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int y = 50; y < 100; y += 25){
-                Pellet pp = new Pellet(575, y);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int y = 150; y < 350; y += 25){
-                Pellet pp = new Pellet(300, y);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int y = 150; y < 350; y += 25){
-                Pellet pp = new Pellet(500, y);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int x = 325; x < 500; x += 25){
-                Pellet pp = new Pellet(x, 275);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int y = 250; y < 300; y += 25){
-                Pellet pp = new Pellet(150, y);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int y = 295; y < 350; y += 25){
-                Pellet pp = new Pellet(200, y);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int y = 300; y < 350; y += 25){
-                Pellet pp = new Pellet(650, y);
-                pp.drawMe(g);
-                p.add(pp);
-            }
-            for (int y = 250; y < 300; y += 25){
-                Pellet pp = new Pellet(600, y);
-                pp.drawMe(g);
-                p.add(pp);
-            }
+
+
+             
+
+            
             for(Walls wall : walls){
                 wall.drawMe(g);
               }
 
-              pac.drawMe(g);
-              animationObjects.add(pac);
+            pp1.drawMe(g);
+pp2.drawMe(g);
+pp3.drawMe(g);
+pp4.drawMe(g);
+pp5.drawMe(g);
+pp6.drawMe(g);
+pp7.drawMe(g);
+pp8.drawMe(g);
+pp9.drawMe(g);
+pp10.drawMe(g);
+pp11.drawMe(g);
+pp12.drawMe(g);
+pp13.drawMe(g);
+pp14.drawMe(g);
+pp15.drawMe(g);
+pp16.drawMe(g);
+pp17.drawMe(g);
+pp18.drawMe(g);
+pp19.drawMe(g);
+pp20.drawMe(g);
+pp21.drawMe(g);
+pp22.drawMe(g);
+pp23.drawMe(g);
+pp24.drawMe(g);
+pp25.drawMe(g);
+pp26.drawMe(g);
+pp27.drawMe(g);
+pp28.drawMe(g);
+              //pac.drawMe(g);
+              play1.drawMe(g);
+              play2.drawMe(g);
+              //animationObjects.add(pac);
+              animationObjects.add(play1);
+              animationObjects.add(play2);
+
+              if (play1.getCount() + play2.getCount() == 28){
+                if (play1.getCount() > play2.getCount()){
+                    g.setColor(Color.BLACK);
+                    g.fillRect(0, 0, 800, 400);
+                    g.setColor(Color.BLUE);
+                    g.setFont(new Font("Serif", Font.BOLD, 50));
+                    g.drawString("Player 1 is the Winner", 150, 200);
+                } else {
+                    g.setColor(Color.BLACK);
+                    g.fillRect(0, 0, 800, 400);
+                    g.setColor(Color.BLUE);
+                    g.setFont(new Font("Serif", Font.BOLD, 50));
+                    g.drawString("Player 2 is the Winner", 150, 200);
+                }
+             }
         }
         public void animate(){
             //pac.drawMe(g);
             myBuffer.fillRect(0,0,800,400);
+            //System.out.println(p.get(0).getX());
             for(Animatable animationObject : animationObjects)
             {
                 animationObject.step();  //Every Animatable object knows how to do one animation step
                 animationObject.drawMe(myBuffer);  //Every Animatable object knows how to draw itself on a Graphics object
+                
+                play1.respawn(walls);
+                play2.respawn(walls);
+                play1.eatHardPellet(pp1);
+play1.eatHardPellet(pp2);
+play1.eatHardPellet(pp3);
+play1.eatHardPellet(pp4);
+play1.eatHardPellet(pp5);
+play1.eatHardPellet(pp6);
+play1.eatHardPellet(pp7);
+play1.eatHardPellet(pp8);
+play1.eatHardPellet(pp9);
+play1.eatHardPellet(pp10);
+play1.eatHardPellet(pp11);
+play1.eatHardPellet(pp12);
+play1.eatHardPellet(pp13);
+play1.eatHardPellet(pp14);
+play1.eatHardPellet(pp15);
+play1.eatHardPellet(pp16);
+play1.eatHardPellet(pp17);
+play1.eatHardPellet(pp18);
+play1.eatHardPellet(pp19);
+play1.eatHardPellet(pp20);
+play1.eatHardPellet(pp21);
+play1.eatHardPellet(pp22);
+play1.eatHardPellet(pp23);
+play1.eatHardPellet(pp24);
+play1.eatHardPellet(pp25);
+play1.eatHardPellet(pp26);
+play1.eatHardPellet(pp27);
+play1.eatHardPellet(pp28);
+
+
+play2.eatHardPellet(pp1);
+play2.eatHardPellet(pp2);
+play2.eatHardPellet(pp3);
+play2.eatHardPellet(pp4);
+play2.eatHardPellet(pp5);
+play2.eatHardPellet(pp6);
+play2.eatHardPellet(pp7);
+play2.eatHardPellet(pp8);
+play2.eatHardPellet(pp9);
+play2.eatHardPellet(pp10);
+play2.eatHardPellet(pp11);
+play2.eatHardPellet(pp12);
+play2.eatHardPellet(pp13);
+play2.eatHardPellet(pp14);
+play2.eatHardPellet(pp15);
+play2.eatHardPellet(pp16);
+play2.eatHardPellet(pp17);
+play2.eatHardPellet(pp18);
+play2.eatHardPellet(pp19);
+play2.eatHardPellet(pp20);
+play2.eatHardPellet(pp21);
+play2.eatHardPellet(pp22);
+play2.eatHardPellet(pp23);
+play2.eatHardPellet(pp24);
+play2.eatHardPellet(pp25);
+play2.eatHardPellet(pp26);
+play2.eatHardPellet(pp27);
+play2.eatHardPellet(pp28);
+
+                //repaint();
             }
+            //revalidate();
             repaint();
         }
         private class AnimationListener implements ActionListener
@@ -424,65 +516,136 @@ import javax.swing.JButton;
                 animate();  //...hence animation!
             }
         }
-        private class Key extends KeyAdapter {
-            public void keyPressed(KeyEvent e) {
-               if(e.getKeyCode() == KeyEvent.VK_LEFT && !left) {
-                System.out.println("left");
-                  pac.setDX(pac.getDX() - 25);
-                  //pac.setDY(0);
-                  left = true;
-                //   right = false;
-                //   up = false;
-                //   down = false;
-               }
-               if(e.getKeyCode() == KeyEvent.VK_RIGHT && !right) {
-                System.out.println("right");
-                  pac.setDX(pac.getDX() + 25);
-                  //pac.setDY(0);
-                  right = true;
-                //   left = false;
-                //   up = false;
-                //   down = false;
-               }
-               if(e.getKeyCode() == KeyEvent.VK_UP && !up) {
-                System.out.println("up");
-                  pac.setDY(pac.getDY() - 25);
-                  //pac.setDX(0);
-                  up = true;
-                //   left = false;
-                //   right = false;
-                //   down = false;
-               }
-               if(e.getKeyCode() == KeyEvent.VK_DOWN && !down) {
-                System.out.println("down");
-                  pac.setDY(pac.getDY() + 25);
-                  //pac.setDX(0);
-                  down = true;
-                //   left = false;
-                //   right = false;
-                //   up = false;
-               }
-            }
-            public void keyReleased(KeyEvent e) {
+
+        // private class Eat{
+
+        // }
+        private class Key extends KeyAdapter 
+        {
+            public void keyPressed(KeyEvent e) 
+            {
+                if(e.getKeyCode() == KeyEvent.VK_LEFT && !left) {
+                 //System.out.println("left");
+                   //pac.setDX(-1);
+                   //pac.setDY(0);
+                   play1.setX(play1.getX() - 25);
+                   left = true;
+                   right = false;
+                   up = false;
+                   down = false;
+                   //System.out.println(getPellets());
+                 }
+                if(e.getKeyCode() == KeyEvent.VK_RIGHT && !right) {
+                 //System.out.println("right");
+                 //   pac.setDX(1);
+                   //pac.setDY(0);
+                   play1.setX(play1.getX() + 25);
+                   right = true;
+                   left = false;
+                   up = false;
+                   down = false;
+                }
+                if(e.getKeyCode() == KeyEvent.VK_UP && !up) {
+                 //System.out.println("up");
+                   //pac.setDY(-1);
+                   //pac.setDX(0);
+                   play1.setY(play1.getY() - 25);
+                   up = true;
+                   left = false;
+                   right = false;
+                   down = false;
+                }
+                if(e.getKeyCode() == KeyEvent.VK_DOWN && !down) {
+                 //System.out.println("down");
+                   //pac.setDY(1);
+                   //pac.setDX(0);
+                   play1.setY(play1.getY() + 25);
+                   down = true;
+                   left = false;
+                   right = false;
+                   up = false;
+                }
+
+                if(e.getKeyCode() == KeyEvent.VK_A && !left) {
+                    //System.out.println("left");
+                      //pac.setDX(-1);
+                      //pac.setDY(0);
+                      play2.setX(play2.getX() - 25);
+                      aa = true;
+                      d = false;
+                      w = false;
+                      s = false;
+                      //System.out.println(getPellets());
+                }
+                if(e.getKeyCode() == KeyEvent.VK_D && !right) {
+                    //System.out.println("right");
+                    //   pac.setDX(1);
+                      //pac.setDY(0);
+                      play2.setX(play2.getX() + 25);
+                      aa = false;
+                      d = true;
+                      w = false;
+                      s = false;
+                   }
+                   if(e.getKeyCode() == KeyEvent.VK_W && !up) {
+                    //System.out.println("up");
+                      //pac.setDY(-1);
+                      //pac.setDX(0);
+                      play2.setY(play2.getY() - 25);
+                      w = true;
+                      aa = false;
+                      d = false;
+                      s = false;
+                   }
+                   if(e.getKeyCode() == KeyEvent.VK_S && !down) {
+                    //System.out.println("down");
+                      //pac.setDY(1);
+                      //pac.setDX(0);
+                      play2.setY(play2.getY() + 25);
+                      s = true;
+                      aa = false;
+                      d = false;
+                      w = false;
+                   }
+              }
+
+             public void keyReleased(KeyEvent e) 
+             {
                 if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-                   pac.setDX(pac.getDX()+ 0);
+                   //play1.setDX(play1.getDX()+ 1);
                    left = false;
                 }
                 if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                   pac.setDX(pac.getDX() - 0); 
+                    //play1.setDX(play1.getDX() - 1); 
                    right = false;
                 }
                 if(e.getKeyCode() == KeyEvent.VK_UP) {
-                   pac.setDY(pac.getDY() + 0);
+                    //play1.setDY(play1.getDY() + 1);
                    up = false;
                 }
                 if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-                pac.setDY(pac.getDY() - 0);
+                    //play1.setDY(play1.getDY() - 1);
                    down = false;
-                }
-             }
-        } 
+                }    
 
+                if(e.getKeyCode() == KeyEvent.VK_A) {
+                    //play1.setDX(play1.getDX()+ 1);
+                    aa = false;
+                 }
+                 if(e.getKeyCode() == KeyEvent.VK_D) {
+                    //play1.setDX(play1.getDX() - 1); 
+                    d = false;
+                 }
+                 if(e.getKeyCode() == KeyEvent.VK_W) {
+                    //play1.setDY(play1.getDY() + 1);
+                    w = false;
+                 }
+                 if(e.getKeyCode() == KeyEvent.VK_S) {
+                    //play1.setDY(play1.getDY() - 1);
+                    s = false;
+                 }
+                }
+            }
     }
 
         // Settings Panel
@@ -524,8 +687,17 @@ import javax.swing.JButton;
             s.setColor(Color.BLACK);
             s.drawString("Settings", 130, 60);
             s.setFont(new Font("Serif", Font.BOLD, 20));
-            s.drawString("Controls -", 8, 100);
-            s.drawString(" Use Arrow keys to control Pac-Man", 88, 100);
+            s.drawString("Movement:", 8, 100);
+            s.drawString("Player 1:", 8, 120);
+            s.drawString(" Use Arrow keys to control Pac-Man", 3, 140);
+            s.drawString("Player 2:", 8, 165);
+            s.drawString("Use WASD to control Pac-Man", 8, 185);
+            s.drawString("Gameplay:", 8, 220);
+            s.drawString("Both players should avoid hitting walls", 8, 240);
+            s.drawString("How to Win:", 8, 280);
+            s.drawString("Players compete to see which player can", 8, 300);
+            s.drawString("collect the most pellets", 8, 320);
+
             
 
         }
@@ -656,4 +828,3 @@ import javax.swing.JButton;
     }
 
   }
-        
